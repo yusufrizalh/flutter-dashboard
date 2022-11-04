@@ -1,30 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_first_app/components/course_create.dart';
-import 'package:flutter_first_app/components/course_detail_page.dart';
-import '../models/course_model.dart';
+import '../../models/employee_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as converter;
 
-class CoursePage extends StatefulWidget {
-  const CoursePage({super.key});
-
+class EmployeePage extends StatefulWidget {
+  const EmployeePage({super.key});
   @override
-  State<CoursePage> createState() => _CoursePageState();
+  State<EmployeePage> createState() => _EmployeePageState();
 }
 
-class _CoursePageState extends State<CoursePage> {
-  String url = "http://localhost/flutter-api/api/getAllCourses.php";
-  List<Course> courseList = []; // diawal masih kosong
-  List<Course> searchCourseList = []; // diawal masih kosong
+class _EmployeePageState extends State<EmployeePage> {
+  String url = "http://localhost:3000/employees";
+  List<EmployeeModel> employeeList = []; // diawal masih kosong
+  List<EmployeeModel> searchEmployeeList = []; // diawal masih kosong
 
   // memanggil data dari API
-  Future<List<Course>> getCourseList() async {
+  Future<List<EmployeeModel>> getEmployeeList() async {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
         debugPrint(response.body);
-        List<Course> courses = parsingJson(response.body);
-        return courses;
+        List<EmployeeModel> employees = parsingJson(response.body);
+        return employees;
       } else {
         throw Exception("Error while getting data...");
       }
@@ -33,18 +30,20 @@ class _CoursePageState extends State<CoursePage> {
     }
   }
 
-  List<Course> parsingJson(String body) {
+  List<EmployeeModel> parsingJson(String body) {
     final parsedJson = converter.json.decode(body).cast<Map<String, dynamic>>();
-    return parsedJson.map<Course>((json) => Course.fromJson(json)).toList();
+    return parsedJson
+        .map<EmployeeModel>((json) => EmployeeModel.fromJson(json))
+        .toList();
   }
 
   @override
   void initState() {
     super.initState();
-    getCourseList().then((value) {
+    getEmployeeList().then((value) {
       setState(() {
-        searchCourseList = value;
-        courseList = searchCourseList;
+        searchEmployeeList = value;
+        employeeList = searchEmployeeList;
       });
     });
   }
@@ -53,7 +52,7 @@ class _CoursePageState extends State<CoursePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Course List"),
+        title: const Text("Employee List"),
       ),
       body: Center(
         child: Column(
@@ -72,16 +71,15 @@ class _CoursePageState extends State<CoursePage> {
                 onChanged: (keyword) {
                   // perintah untuk filter data
                   setState(() {
-                    courseList = searchCourseList
+                    employeeList = searchEmployeeList
                         .where(
                           (element) =>
-                              (element.name.toLowerCase().contains(
+                              (element.name!.toLowerCase().contains(
                                     keyword.toLowerCase(),
                                   )) ||
-                              (element.description.toLowerCase().contains(
-                                    keyword.toLowerCase(),
-                                  )) ||
-                              (element.price.toLowerCase().contains(
+                              (element.department![0].name!
+                                  .toLowerCase()
+                                  .contains(
                                     keyword.toLowerCase(),
                                   )),
                         )
@@ -94,7 +92,7 @@ class _CoursePageState extends State<CoursePage> {
               child: ListView.builder(
                 shrinkWrap: true,
                 padding: const EdgeInsets.all(6.0),
-                itemCount: courseList.length,
+                itemCount: employeeList.length,
                 itemBuilder: (context, position) {
                   return Card(
                     shape: RoundedRectangleBorder(
@@ -103,21 +101,10 @@ class _CoursePageState extends State<CoursePage> {
                     ),
                     child: ListTile(
                       leading: const Icon(Icons.list),
-                      title: Text(courseList[position].name.toString()),
+                      title: Text(employeeList[position].name.toString()),
                       subtitle: Text(
-                        "${courseList[position].price} - ${courseList[position].description}",
+                        "Dept: ${employeeList[position].department![0].name}\nManager: ${employeeList[position].department![0].manager![0].name}",
                       ),
-                      onTap: () {
-                        // membuka halaman detail course
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => CourseDetailPage(
-                              courseModel: courseList[position],
-                            ),
-                          ),
-                        );
-                      },
                     ),
                   );
                 },
@@ -125,12 +112,6 @@ class _CoursePageState extends State<CoursePage> {
             ),
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => const CourseCreate(),
-        )),
-        child: const Icon(Icons.add),
       ),
     );
   }

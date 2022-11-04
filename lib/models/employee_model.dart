@@ -6,13 +6,14 @@ class EmployeeModel {
   List<Department>? department;
   List<Address>? address;
 
-  EmployeeModel(
-      {this.id,
-      this.name,
-      this.age,
-      this.salary,
-      this.department,
-      this.address});
+  EmployeeModel({
+    this.id,
+    this.name,
+    this.age,
+    this.salary,
+    this.department,
+    this.address,
+  });
 
   EmployeeModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];

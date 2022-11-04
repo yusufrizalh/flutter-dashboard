@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_first_app/components/about_page.dart';
-import 'package:flutter_first_app/components/employee_page.dart';
 import 'package:flutter_first_app/pages/search_page.dart';
 import 'package:flutter_first_app/pages/settings_page.dart';
 
 import 'components/course_page.dart';
+import 'components/employees/employee_page.dart';
 import 'components/gallery_page.dart';
 
 void main() {
@@ -106,21 +106,21 @@ class SliverAppbarWidget extends StatelessWidget {
                 Navigator.push(context, courseRoute);
               },
             ),
-            // ListTile(
-            //   title: Text(
-            //     'Employees',
-            //     style: TextStyle(
-            //       fontSize: 14.0,
-            //       color: Colors.white,
-            //     ),
-            //   ),
-            //   leading: Icon(Icons.group, color: Colors.white),
-            //   onTap: () {
-            //     Route courseRoute =
-            //         MaterialPageRoute(builder: (context) => EmployeePage());
-            //     Navigator.push(context, courseRoute);
-            //   },
-            // ),
+            ListTile(
+              title: Text(
+                'Employees',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.white,
+                ),
+              ),
+              leading: Icon(Icons.group, color: Colors.white),
+              onTap: () {
+                Route employeeRoute =
+                    MaterialPageRoute(builder: (context) => EmployeePage());
+                Navigator.push(context, employeeRoute);
+              },
+            ),
           ],
         ),
         backgroundColor: Colors.red,
