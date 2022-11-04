@@ -1,8 +1,13 @@
 // ignore_for_file: prefer_const_constructors, prefer_const_literals_to_create_immutables, avoid_print, sort_child_properties_last
 
 import 'package:flutter/material.dart';
+import 'package:flutter_first_app/components/about_page.dart';
+import 'package:flutter_first_app/components/employee_page.dart';
 import 'package:flutter_first_app/pages/search_page.dart';
 import 'package:flutter_first_app/pages/settings_page.dart';
+
+import 'components/course_page.dart';
+import 'components/gallery_page.dart';
 
 void main() {
   runApp(MySliverApp());
@@ -54,7 +59,11 @@ class SliverAppbarWidget extends StatelessWidget {
                 ),
               ),
               leading: Icon(Icons.photo, color: Colors.white),
-              onTap: () => print('Menu Gallery'),
+              onTap: () {
+                Route galleryRoute =
+                    MaterialPageRoute(builder: (context) => GalleryPage());
+                Navigator.push(context, galleryRoute);
+              },
             ),
             ListTile(
               title: Text(
@@ -65,7 +74,11 @@ class SliverAppbarWidget extends StatelessWidget {
                 ),
               ),
               leading: Icon(Icons.calendar_today, color: Colors.white),
-              onTap: () => print('Menu About'),
+              onTap: () {
+                Route aboutRoute =
+                    MaterialPageRoute(builder: (context) => AboutPage());
+                Navigator.push(context, aboutRoute);
+              },
             ),
             ListTile(
               title: Text(
@@ -78,6 +91,36 @@ class SliverAppbarWidget extends StatelessWidget {
               leading: Icon(Icons.contact_mail, color: Colors.white),
               onTap: () => print('Menu Contact'),
             ),
+            ListTile(
+              title: Text(
+                'Courses',
+                style: TextStyle(
+                  fontSize: 14.0,
+                  color: Colors.white,
+                ),
+              ),
+              leading: Icon(Icons.book, color: Colors.white),
+              onTap: () {
+                Route courseRoute =
+                    MaterialPageRoute(builder: (context) => CoursePage());
+                Navigator.push(context, courseRoute);
+              },
+            ),
+            // ListTile(
+            //   title: Text(
+            //     'Employees',
+            //     style: TextStyle(
+            //       fontSize: 14.0,
+            //       color: Colors.white,
+            //     ),
+            //   ),
+            //   leading: Icon(Icons.group, color: Colors.white),
+            //   onTap: () {
+            //     Route courseRoute =
+            //         MaterialPageRoute(builder: (context) => EmployeePage());
+            //     Navigator.push(context, courseRoute);
+            //   },
+            // ),
           ],
         ),
         backgroundColor: Colors.red,
