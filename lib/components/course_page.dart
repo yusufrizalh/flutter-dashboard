@@ -74,13 +74,9 @@ class _CoursePageState extends State<CoursePage> {
                   setState(() {
                     courseList = searchCourseList
                         .where(
-                          (element) =>
-                              (element.name.toLowerCase().contains(
-                                    keyword.toLowerCase(),
-                                  )) ||
-                              (element.description.toLowerCase().contains(
-                                    keyword.toLowerCase(),
-                                  )),
+                          (element) => (element.name.toLowerCase().contains(
+                                keyword.toLowerCase(),
+                              )),
                         )
                         .toList();
                   });
@@ -102,7 +98,7 @@ class _CoursePageState extends State<CoursePage> {
                       leading: const Icon(Icons.list),
                       title: Text(courseList[position].name.toString()),
                       subtitle: Text(
-                        "${courseList[position].price} - ${courseList[position].description}",
+                        courseList[position].price.toString(),
                       ),
                       onTap: () {
                         // membuka halaman detail course

@@ -1,26 +1,39 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_first_app/components/course_page.dart';
+import '../models/course_model.dart';
 import 'package:http/http.dart' as http;
 import '../forms/course_form.dart';
 
-class CourseCreate extends StatefulWidget {
-  const CourseCreate({super.key});
+class CourseEdit extends StatefulWidget {
+  final Course courseModel;
+  const CourseEdit({super.key, required this.courseModel});
+
   @override
-  State<CourseCreate> createState() => _CourseCreateState();
+  State<CourseEdit> createState() => _CourseEditState();
 }
 
-class _CourseCreateState extends State<CourseCreate> {
-  // properties
+class _CourseEditState extends State<CourseEdit> {
+// properties
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   TextEditingController nameCtrl = TextEditingController();
   TextEditingController priceCtrl = TextEditingController();
   TextEditingController descriptionCtrl = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    nameCtrl = TextEditingController(text: widget.courseModel.name.toString());
+    priceCtrl =
+        TextEditingController(text: widget.courseModel.price.toString());
+    descriptionCtrl =
+        TextEditingController(text: widget.courseModel.description.toString());
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Create New Course"),
+        title: const Text("Update Course"),
       ),
       body: Center(
         child: Column(
@@ -33,9 +46,9 @@ class _CourseCreateState extends State<CourseCreate> {
             ),
             ElevatedButton(
               onPressed: () {
-                // perintah untuk proses menyimpan data
+                // perintah untuk proses mengubah data
                 if (formKey.currentState!.validate()) {
-                  createCourse(context);
+                  updateCourse(context);
                   // snackbar atau alert
                   // redirect kembali ke halaman course page
                   Navigator.of(context).push(
@@ -45,7 +58,7 @@ class _CourseCreateState extends State<CourseCreate> {
                   );
                 }
               },
-              child: const Text("Create Course"),
+              child: const Text("Update Course"),
             ),
           ],
         ),
@@ -53,14 +66,15 @@ class _CourseCreateState extends State<CourseCreate> {
     );
   }
 
-  Future createCourse(BuildContext context) async {
-    String url = "http://localhost/flutter-api/api/createCourse.php";
+  Future updateCourse(BuildContext context) async {
+    String url = "http://localhost/flutter-api/api/updateCourse.php";
     return await http.post(
       Uri.parse(url),
       body: {
         "name": nameCtrl.text,
         "price": priceCtrl.text,
         "description": descriptionCtrl.text,
+        "id": widget.courseModel.id.toString(),
       },
     );
   }
